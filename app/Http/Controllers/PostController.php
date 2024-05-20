@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\PostResource;
 use App\Http\Trait\apiPostTrait;
 use App\Models\Post;
@@ -22,21 +23,15 @@ class PostController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        $input = $request->validate([
-            'tile' => ['required'],
-            'category_id' => ['required'],
-            'body' => ['required'],
-        ]);
+        $validated = $request->validated();
         $post = Post::create([
             'tile' => $request['tile'],
-            'category_id' => $request['category_id'],
-            
+            'category_id' => $request['category_id'],          
             'body' =>$request['body'],
         ]);
         if ($post->save()) {
-
             return response()->json([
                 'Message: ' => 'Success!',
                 'Post created: ' => $post,
