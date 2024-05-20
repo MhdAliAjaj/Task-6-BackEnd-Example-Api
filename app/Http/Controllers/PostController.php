@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
+use App\Http\Trait\apiPostTrait;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -10,10 +12,13 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use apiPostTrait;
+  
     public function index()
     {
         $posts = Post::all();
-        return response()->json($posts);
+        
+        return $this->customapi(PostResource::collection($posts),'all post',200);
     }
 
 
